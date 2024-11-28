@@ -76,31 +76,20 @@ static void bt_hid_cmd_ps5_trigger_init(struct bt_dev *device) {
         perc_threshold_l = -1;
     }
 
-    uint8_t r2_start_resistance_value = (perc_threshold_r * 255) / 100;
-    uint8_t l2_start_resistance_value = (perc_threshold_l * 255) / 100;
-
-    uint8_t r2_trigger_start_resistance = (uint8_t)(0x94 * (r2_start_resistance_value / 255.0));
-    uint8_t r2_trigger_effect_force =
-        (uint8_t)((0xb4 - r2_trigger_start_resistance) * (r2_start_resistance_value / 255.0) + r2_trigger_start_resistance);
-
-    uint8_t l2_trigger_start_resistance = (uint8_t)(0x94 * (l2_start_resistance_value / 255.0));
-    uint8_t l2_trigger_effect_force =
-        (uint8_t)((0xb4 - l2_trigger_start_resistance) * (l2_start_resistance_value / 255.0) + l2_trigger_start_resistance);
-
     struct bt_hidp_ps5_set_conf ps5_set_conf = {
         .conf0 = 0x02,
         .cmd = 0x0c,
         .r2_trigger_motor_mode = perc_threshold_r > -1 ? 0x02 : 0x00,
-        .r2_trigger_start_resistance = r2_trigger_start_resistance,
-        .r2_trigger_effect_force = r2_trigger_effect_force,
+        .r2_trigger_start_resistance = 0xB4,
+        .r2_trigger_effect_force = 0xC0,
         .r2_trigger_range_force = 0xff,
         .r2_trigger_near_release_str = 0x00,
         .r2_trigger_near_middle_str = 0x00,
         .r2_trigger_pressed_str = 0x00,
         .r2_trigger_actuation_freq = 0x00,
         .l2_trigger_motor_mode = perc_threshold_l > -1 ? 0x02 : 0x00,
-        .l2_trigger_start_resistance = l2_trigger_start_resistance,
-        .l2_trigger_effect_force = l2_trigger_effect_force,
+        .l2_trigger_start_resistance = 0xB4,
+        .l2_trigger_effect_force = 0xC0,
         .l2_trigger_range_force = 0xff,
         .l2_trigger_near_release_str = 0x00,
         .l2_trigger_near_middle_str = 0x00,
